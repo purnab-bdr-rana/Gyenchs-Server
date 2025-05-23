@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask environment files
+.env
+.flaskenv
+
+# Environment directories
+venv/
+env/
+.venv/
+ENV/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Pytest / Coverage / Logs
+*.log
+coverage/
+htmlcov/
+.tox/
+.pytest_cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Database files (optional: if using SQLite)
+*.sqlite3
+*.db
+
+# Python Wheels
+*.whl
+
+# Distribution / Packaging
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Requirements file backups
+requirements*.txt~
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+
+# VSCode Python extension settings (optional)
+.python-version
