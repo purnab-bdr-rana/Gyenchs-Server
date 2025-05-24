@@ -1,4 +1,3 @@
-# Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
 # Set environment variables
@@ -9,7 +8,12 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y build-essential libpq-dev
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    libgl1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt .
@@ -21,8 +25,8 @@ COPY . .
 # Expose the port that the app runs on
 EXPOSE 3000
 
-# Set the environment variable to tell Flask it's in production
+# Set environment variable for Flask
 ENV FLASK_ENV=production
 
-# Command to run the app
+# Run the app using gunicorn
 CMD ["gunicorn", "-b", "0.0.0.0:3000", "app:create_app()"]
