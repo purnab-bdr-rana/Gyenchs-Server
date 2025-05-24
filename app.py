@@ -24,11 +24,12 @@ def create_app(db_url=None):
     app = Flask(__name__)
 
     CORS(app,
-         origins=["https://gyencha.purnabdrrana.com"],
-        supports_credentials=True, 
-         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         resources={r"/*": {"origins": "https://gyencha.purnabdrrana.com"}},
+         methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
          allow_headers=["Authorization", "Content-Type"],
-         max_age=3600)    
+         max_age=3600)
+
+     
     load_dotenv()
 
     app.secret_key = os.getenv("APP_SECRET_KEY")
@@ -138,10 +139,6 @@ def create_app(db_url=None):
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(WardrobeItemsBlueprint)
     api.register_blueprint( OutfitsBlueprint)
-
-    @app.route("/<path:path>", methods=["OPTIONS"])
-    def options_handler(path):
-        return '', 204
 
     return app
 
