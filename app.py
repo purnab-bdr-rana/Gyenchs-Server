@@ -1,6 +1,7 @@
 import os
 from datetime import timedelta
 
+from flask_compress import Compress
 from flask_cors import CORS
 from flask import Flask, jsonify
 from flask_smorest import Api
@@ -19,10 +20,13 @@ from authlib.integrations.flask_client import OAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
-    app.secret_key = 'your_secret_key'
+    app.secret_key = os.getenv("APP_SECRET_KEY")
+
+    Compress(app)
+
     CORS(app, resources={r"/*": {"origins": [
         "http://localhost:5173",
-        "https://gyench.purnabdrrana.com"
+        "https://gyencha.purnabdrrana.com"
     ]}})
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Gyencha Backend REST API docs"

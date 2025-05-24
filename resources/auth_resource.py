@@ -156,7 +156,7 @@ class GoogleAuthorize(MethodView):
         user_json = quote(json.dumps(current_user))
 
         return redirect(
-            f"http://localhost:5173/callback?access-token={access_token}&refresh-token={refresh_token}&user={user_json}"
+            f"https://gyencha.purnabdrrana.com/callback?access-token={access_token}&refresh-token={refresh_token}&user={user_json}"
         )
 
 
