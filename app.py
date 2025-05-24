@@ -22,13 +22,12 @@ from authlib.integrations.flask_client import OAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    CORS(app)
     load_dotenv()
 
     app.secret_key = os.getenv("APP_SECRET_KEY")
 
     Compress(app)
-
-    CORS(app)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Gyencha Backend REST API docs"
