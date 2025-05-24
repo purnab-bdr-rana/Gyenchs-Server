@@ -5,6 +5,7 @@ from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt
 from urllib.parse import quote
 import json
+from flask_cors import cross_origin
 
 from blocklist import BLOCKLIST
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -81,6 +82,7 @@ class VerifySignUp(MethodView):
 # login users
 @blp.route("/auth/login")
 class UserLogin(MethodView):
+    decorators = [cross_origin(origin='*')]
     @blp.arguments(UserSchema)
     def post(self, user_data):
         user = UserModel.query.filter_by(email=user_data["email"]).first()
