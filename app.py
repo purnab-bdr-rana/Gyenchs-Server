@@ -24,7 +24,7 @@ def create_app(db_url=None):
     app = Flask(__name__)
 
     CORS(app,
-         resources={r"/*": {"origins": "https://gyencha.purnabdrrana.com"}},
+         resources={r"/*": {"origins": "*"}},
          methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
          allow_headers=["Authorization", "Content-Type"],
          max_age=3600)
