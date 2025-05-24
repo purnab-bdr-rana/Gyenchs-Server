@@ -28,4 +28,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the app using gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "app:create_app()"]
+CMD ["gunicorn", "-w", "3", "-b", "0.0.0.0:3000", "app:create_app()"]

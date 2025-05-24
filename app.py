@@ -25,6 +25,7 @@ def create_app(db_url=None):
 
     CORS(app,
          origins=["https://gyencha.purnabdrrana.com"],
+        supports_credentials=True, 
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
          allow_headers=["Authorization", "Content-Type"],
          max_age=3600)    
@@ -137,6 +138,10 @@ def create_app(db_url=None):
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(WardrobeItemsBlueprint)
     api.register_blueprint( OutfitsBlueprint)
+
+    @app.route("/<path:path>", methods=["OPTIONS"])
+    def options_handler(path):
+        return '', 204
 
     return app
 
