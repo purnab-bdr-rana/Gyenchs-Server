@@ -12,4 +12,5 @@ WORKDIR /app
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 COPY . .
-CMD exec gunicorn --bind "0.0.0.0:$PORT" "app:create_app()"
+EXPOSE 3000
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "app:create_app()"]
