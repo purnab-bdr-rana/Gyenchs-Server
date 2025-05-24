@@ -20,7 +20,6 @@ scikit-learn
 psycopg2-binary
 gunicorn
 flask_compress
-dotenv
 
 
 

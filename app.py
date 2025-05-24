@@ -8,6 +8,7 @@ from flask_smorest import Api
 from db import db
 from dotenv import load_dotenv
 
+
 from flask_jwt_extended import JWTManager
 from blocklist import BLOCKLIST
 from flask_migrate import Migrate
@@ -22,6 +23,7 @@ from authlib.integrations.flask_client import OAuth
 def create_app(db_url=None):
     app = Flask(__name__)
     load_dotenv()
+
     app.secret_key = os.getenv("APP_SECRET_KEY")
 
     Compress(app)
@@ -37,7 +39,7 @@ def create_app(db_url=None):
     app.config["OPENAPI_URL_PREFIX"] = "/"
     app.config["OPENAPI_SWAGGER_UI_PATH"] = "/api-docs"
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL", "sqlite:///data.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL", "sqlite:////app/data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
