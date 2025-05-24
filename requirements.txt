@@ -12,7 +12,6 @@ pillow
 numpy
 opencv-python
 tensorflow
-psycopg2
 flask-cors
 authlib
 onnxruntime
