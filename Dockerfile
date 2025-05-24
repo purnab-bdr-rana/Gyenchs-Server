@@ -25,4 +25,4 @@ EXPOSE 3000
 ENV FLASK_ENV=production
 
 # Command to run the app
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "app:create_app()", "--worker-class", "gevent", "--workers", "4"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "app:create_app()"]
