@@ -22,15 +22,13 @@ from authlib.integrations.flask_client import OAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    load_dotenv()
 
     CORS(app,
          resources={r"/*": {"origins": "*"}},
          methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-         allow_headers=["Authorization", "Content-Type"],
+         allow_headers=["Authorization", "Content-Type", "X-Requested-With"],
          max_age=3600)
-
-     
-    load_dotenv()
 
     app.secret_key = os.getenv("APP_SECRET_KEY")
 
