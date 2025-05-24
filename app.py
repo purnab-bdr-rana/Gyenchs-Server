@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify
 from flask_smorest import Api
 from db import db
+from dotenv import load_dotenv
 
 from flask_jwt_extended import JWTManager
 from blocklist import BLOCKLIST
@@ -20,6 +21,7 @@ from authlib.integrations.flask_client import OAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    load_dotenv()
     app.secret_key = os.getenv("APP_SECRET_KEY")
 
     Compress(app)
