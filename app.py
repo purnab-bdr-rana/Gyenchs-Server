@@ -22,16 +22,7 @@ from authlib.integrations.flask_client import OAuth
 
 def create_app(db_url=None):
     app = Flask(__name__)
-    CORS(
-    app,
-    origins=[
-        "https://gyencha.purnabdrrana.com",
-        "http://localhost:5173"
-    ],
-    supports_credentials=True,
-    methods=["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Content-Type", "Authorization"]
-)
+    CORS(app)
 
     load_dotenv()
 
