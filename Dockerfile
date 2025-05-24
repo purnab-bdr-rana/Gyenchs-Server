@@ -1,32 +1,33 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Install system dependencies required by OpenCV and rembg
-RUN apt-get update && apt-get install -y \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libgl1 \
- && rm -rf /var/lib/apt/lists/*
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Set working directory
+# Set work directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    libgl1 \
+    libglib2.0-0 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy your project files
+# Copy app source code
 COPY . .
 
-# Set environment variables for Flask
-ENV FLASK_APP="app:create_app()"
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=3000
-ENV FLASK_ENV=development 
-
-# Expose the port your Flask app uses
+# Expose the port that the app runs on
 EXPOSE 3000
 
-# Run the Flask app directly (no Gunicorn)
-CMD ["flask", "run"]
+# Set environment variable for Flask
+ENV FLASK_ENV=production
+
+# Run the app using gunicorn
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "app:create_app()"]
