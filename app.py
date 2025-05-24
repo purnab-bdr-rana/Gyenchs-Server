@@ -28,15 +28,7 @@ def create_app(db_url=None):
 
     Compress(app)
 
-    CORS(app, 
-         resources={r"/*": {"origins": [
-             "http://localhost:5173", 
-             "https://gyencha.purnabdrrana.com"
-         ]}},
-         supports_credentials=True,
-         allow_headers=["Content-Type", "Authorization"],
-         methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"]
-    )
+    CORS(app)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
     app.config["API_TITLE"] = "Gyencha Backend REST API docs"
