@@ -9,9 +9,7 @@ passlib
 flask-migrate
 cloudinary
 pillow
-numpy
 opencv-python
-tensorflow
 flask-cors
 authlib
 onnxruntime
@@ -20,6 +18,7 @@ scikit-learn
 psycopg2-binary
 gunicorn
 flask_compress
+numpy
 
 
 

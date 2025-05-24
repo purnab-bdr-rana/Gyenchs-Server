@@ -7,7 +7,6 @@ from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import UserModel, WardrobeItemsModel
 from schemas import WardrobeItemsSchema
-from utils.image_classifier import ImageClassifier
 from utils.cloudinary_upload import upload_image_to_cloudinary
 from utils.color_extractor import get_dominant_color
 from cloudinary.uploader import destroy
@@ -15,10 +14,10 @@ import re
 from db import db
 from utils.image_hash import calculate_image_hash
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+import requests
 
 from utils.remove_bg import remove_background
 
-classifier = ImageClassifier()
 blp = Blueprint("user_wardrobe", __name__, description="Wardrobe endpoints")
 
 @blp.route("/user/wardrobe-items")
@@ -51,22 +50,33 @@ class UserWardrobeItems(MethodView):
             if duplicate_item:
                 abort(400, message="This image has already been uploaded.")
 
-            # Step 2: Remove background from image
-            img_no_bg = remove_background(image_file)  # Should return PIL.Image
+            # Step 2: Remove background
+            img_no_bg = remove_background(image_file)  # Returns PIL.Image
 
-            # Step 3: Classify image type
-            img_for_model = img_no_bg.convert("RGB")  # Ensure no alpha for model
-            attire_type = classifier.predict_type(img_for_model)
+        # Step 3: Convert image to RGB and prepare for prediction
+            img_for_model = img_no_bg.convert("RGB")
+            img_byte_arr = io.BytesIO()
+            img_for_model.save(img_byte_arr, format="JPEG")
+            img_byte_arr.seek(0)
+
+            files = {"file": ("attire.jpg", img_byte_arr, "image/jpeg")}
+            prediction_response = requests.post("https://model.gyencha.purnabdrrana.com/predict", files=files)
+
+            if prediction_response.status_code != 200:
+                abort(500, message=f"Prediction service error: {prediction_response.text}")
+
+            attire_type = prediction_response.json().get("prediction")
+            if not attire_type:
+                abort(500, message="Invalid response from prediction service.")
 
             # Step 4: Extract dominant color
             color_hex = get_dominant_color(img_no_bg)
 
-            # Step 5: Prepare image for upload
+            # Step 5: Upload image to cloud
             temp_stream = io.BytesIO()
-            img_no_bg.save(temp_stream, format="PNG")  # Preserve transparency
+            img_no_bg.save(temp_stream, format="PNG")
             temp_stream.seek(0)
 
-            # Step 6: Upload to cloud
             image_url = upload_image_to_cloudinary(
                 temp_stream,
                 user_id,
@@ -74,7 +84,7 @@ class UserWardrobeItems(MethodView):
                 is_unique=True
             )
 
-            # Step 7: Save record to DB
+            # Step 6: Save to DB
             wardrobe_item = WardrobeItemsModel(
                 name=name,
                 type=attire_type,
